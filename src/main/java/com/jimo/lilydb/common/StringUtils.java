@@ -45,4 +45,38 @@ public class StringUtils {
         return (c >= 'a' && c <= 'z')
                 || (c >= 'A' && c <= 'Z');
     }
+
+    /// https://en.wikipedia.org/wiki/Whitespace_character
+    /// with some adjustments.
+    /// Code points: 0085 00A0 180E 2000..200A 2028..2029 200B..200D 202F 205F 2060 3000 FEFF
+    /// The corresponding UTF-8 is: C285 C2A0 E1A08E E28080..E2808A E280A8..E280A9 E2808B..E2808D E280AF E2819F E281A0 E38080 EFBBBF
+    /// We check for these bytes directly in UTF8 for simplicity reasons.
+
+    /**
+     * C2
+     * 85
+     * A0
+     * E1 A0 8E
+     * E2
+     * 80
+     * 80..8A
+     * A8..A9
+     * 8B..8D
+     * AF
+     * 81
+     * 9F
+     * A0
+     * E3 80 80
+     * EF BB BF
+     */
+    public static int skipWhitespacesUTF8(String text, int pos, int end) {
+        while (pos < end) {
+            if (isWhitespaceASCII(text.charAt(pos))) {
+                ++pos;
+            } else {
+
+            }
+        }
+        return pos;
+    }
 }

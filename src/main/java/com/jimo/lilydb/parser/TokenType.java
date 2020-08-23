@@ -13,6 +13,10 @@ public enum TokenType {
     ErrorSingleQuoteIsNotClosed,
     ErrorDoubleQuoteIsNotClosed,
     ErrorBackQuoteIsNotClosed,
+    ErrorMultilineCommentInfoNotClosed,
+    ErrorSingleExclamationMark,
+    ErrorSinglePipeMark,
+    Error,
 
     Dot,
 
@@ -35,6 +39,19 @@ public enum TokenType {
     Arrow,
     Minus,
     Asterisk,
+    Slash,
+    Percent,
+    Equals,
+    NotEquals,
+    LessOrEqual,
+    Less,
+    GreaterOrEquals,
+    Greater,
+    QuestionMark,
+    Colon,
+    Concatenation,
+    DoubleAt,
+    At,
 
     EndOfStream
 }

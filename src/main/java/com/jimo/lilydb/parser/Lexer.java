@@ -192,8 +192,103 @@ public class Lexer {
             }
             case '*':
                 return new Token(TokenType.Asterisk, tokenBegin, ++pos);
+            case '/':
+                /// division(/) or start of comment (//, /*)
+            {
+                ++pos;
+                if (pos < end && (query.charAt(pos) == '/' || query.charAt(pos) == '*')) {
+                    if (query.charAt(pos) == '/') {
+                        ++pos;
+                        return commentUntilEndOfLine();
+                    }
+                } else {
+                    ++pos;
+                    while (pos + 2 <= end) {
+                        if (query.charAt(pos) == '*' && query.charAt(pos + 1) == '/') {
+                            pos += 2;
+                            return new Token(TokenType.Comment, tokenBegin, pos);
+                        }
+                        ++pos;
+                    }
+                    return new Token(TokenType.ErrorMultilineCommentInfoNotClosed, tokenBegin, pos);
+                }
+                return new Token(TokenType.Slash, tokenBegin, pos);
+            }
+            case '%':
+                return new Token(TokenType.Percent, tokenBegin, ++pos);
+            case '=':
+                /// =,==
+            {
+                ++pos;
+                if (pos < end && query.charAt(pos) == '=') {
+                    ++pos;
+                }
+                return new Token(TokenType.Equals, tokenBegin, pos);
+            }
+            case '!':
+                /// !=
+            {
+                ++pos;
+                if (pos < end && query.charAt(pos) == '=') {
+                    return new Token(TokenType.NotEquals, tokenBegin, ++pos);
+                }
+                return new Token(TokenType.ErrorSingleExclamationMark, tokenBegin, pos);
+            }
+            case '<':
+                /// <,<=,<>
+            {
+                ++pos;
+                if (pos < end && query.charAt(pos) == '=') {
+                    return new Token(TokenType.LessOrEqual, tokenBegin, ++pos);
+                }
+                if (pos < end && query.charAt(pos) == '>') {
+                    return new Token(TokenType.NotEquals, tokenBegin, ++pos);
+                }
+                return new Token(TokenType.Less, tokenBegin, pos);
+            }
+            case '>':
+                /// >,>=
+            {
+                ++pos;
+                if (pos < end && query.charAt(pos) == '=') {
+                    return new Token(TokenType.GreaterOrEquals, tokenBegin, ++pos);
+                }
+                return new Token(TokenType.Greater, tokenBegin, pos);
+            }
+            case '?':
+                return new Token(TokenType.QuestionMark, tokenBegin, ++pos);
+            case ':':
+                return new Token(TokenType.Colon, tokenBegin, ++pos);
+            case '|': {
+                ++pos;
+                if (pos < end && query.charAt(pos) == '|') {
+                    return new Token(TokenType.Concatenation, tokenBegin, ++pos);
+                }
+                return new Token(TokenType.ErrorSinglePipeMark, tokenBegin, pos);
+            }
+            case '@': {
+                ++pos;
+                if (pos < end && query.charAt(pos) == '@') {
+                    return new Token(TokenType.DoubleAt, tokenBegin, ++pos);
+                }
+                return new Token(TokenType.At, tokenBegin, pos);
+            }
+            default:
+                if (isWordCharASCII(query.charAt(pos))) {
+                    ++pos;
+                    while (pos < end && isWordCharASCII(query.charAt(pos))) {
+                        ++pos;
+                    }
+                    return new Token(TokenType.BaseWord, tokenBegin, pos);
+                } else {
+                    /// We will also skip unicode whitespaces in UTF-8 to support for queries copy-pasted from MS Word and similar.
+                    pos = skipWhitespacesUTF8(query, pos, end);
+                    if (pos > tokenBegin) {
+                        return new Token(TokenType.Whitespace, tokenBegin, pos);
+                    }
+                    return new Token(TokenType.Error, tokenBegin, ++pos);
+                }
         }
-        return null;
     }
 
     private Token quotedString(char quote, TokenType successToken, TokenType errorToken, int tokenBegin) {
