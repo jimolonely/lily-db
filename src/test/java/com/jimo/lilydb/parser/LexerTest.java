@@ -1,24 +1,34 @@
 package com.jimo.lilydb.parser;
 
-import org.junit.jupiter.api.Test;
 
+import org.junit.Test;
+
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author jimo
  * @date 2020/8/23 下午8:37
  */
-class LexerTest {
+public class LexerTest {
 
     private Map<TokenType, String> highLight = getHighLight();
 
     private Map<TokenType, String> getHighLight() {
-        return null;
+        return new HashMap<>(8);
     }
 
     @Test
-    void test() {
-        String query = "";
+    public void test() {
+        String query = " SELECT 18446744073709551615, f(1), '\\\\', [a, b, c], (a, b, c), 1 + 2 * -3, a = b OR c > d.1 + 2 * -g[0] AND NOT e < f * (x + y)" +
+                " FROM default.hits" +
+                " WHERE CounterID = 101500 AND UniqID % 3 = 0" +
+                " GROUP BY UniqID" +
+                " HAVING SUM(Refresh) > 100" +
+                " ORDER BY Visits, PageViews" +
+                " LIMIT LENGTH('STRING OF 20 SYMBOLS') - 20 + 1000, 10.05 / 5.025 * 5" +
+                " INTO OUTFILE 'test.out'" +
+                " FORMAT TabSeparated";
         Lexer lexer = new Lexer(query);
 
         while (true) {
@@ -48,10 +58,10 @@ class LexerTest {
     }
 
     private void writeString(String token) {
-
+        System.out.println(token);
     }
 
     private void writeChar(char c) {
-        System.out.println(c);
+        System.out.print(c);
     }
 }

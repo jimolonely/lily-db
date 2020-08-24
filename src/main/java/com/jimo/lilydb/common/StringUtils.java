@@ -74,7 +74,18 @@ public class StringUtils {
             if (isWhitespaceASCII(text.charAt(pos))) {
                 ++pos;
             } else {
-
+                if (pos + 1 < end && text.charAt(pos) == 0xC2
+                        && (text.charAt(pos + 1) == 0x85 || text.charAt(pos + 1) == 0xA0)) {
+                    pos += 2;
+                } else if (
+                        pos + 2 < end
+                                && (text.charAt(pos) == 0xE1 && text.charAt(pos + 1) == 0xA0 && text.charAt(pos + 2) == 0x8E)
+                    // TODO 还没写完
+                ) {
+                    pos += 3;
+                } else {
+                    break;
+                }
             }
         }
         return pos;

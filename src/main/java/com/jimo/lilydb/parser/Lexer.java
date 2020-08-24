@@ -21,6 +21,7 @@ public class Lexer {
 
     public Lexer(String query) {
         this.query = query;
+        this.begin = 0;
         this.end = query.length();
     }
 
@@ -126,8 +127,7 @@ public class Lexer {
             case '"':
                 return quotedString('"', TokenType.QuotedIdentifier, TokenType.ErrorDoubleQuoteIsNotClosed, tokenBegin);
             case '`':
-                return quotedString('\'', TokenType.QuotedIdentifier, TokenType.ErrorBackQuoteIsNotClosed, tokenBegin);
-
+                return quotedString('`', TokenType.QuotedIdentifier, TokenType.ErrorBackQuoteIsNotClosed, tokenBegin);
             case '(':
                 return new Token(TokenType.OpeningRoundBracket, tokenBegin, ++pos);
             case ')':
@@ -155,7 +155,7 @@ public class Lexer {
                         || prevSignificantTokenType == TokenType.BaseWord
                         || prevSignificantTokenType == TokenType.QuotedIdentifier
                         || prevSignificantTokenType == TokenType.Number)) {
-                    return new Token(TokenType.Dot, tokenBegin, pos);
+                    return new Token(TokenType.Dot, tokenBegin, ++pos);
                 }
                 ++pos;
                 while (pos < end && isNumericASCII(query.charAt(pos))) {
@@ -186,7 +186,7 @@ public class Lexer {
                 }
                 if (pos < end && query.charAt(pos) == '-') {
                     ++pos;
-                    return commentUntilEndOfLine();
+                    return commentUntilEndOfLine(tokenBegin);
                 }
                 return new Token(TokenType.Minus, tokenBegin, pos);
             }
@@ -199,18 +199,18 @@ public class Lexer {
                 if (pos < end && (query.charAt(pos) == '/' || query.charAt(pos) == '*')) {
                     if (query.charAt(pos) == '/') {
                         ++pos;
-                        return commentUntilEndOfLine();
-                    }
-                } else {
-                    ++pos;
-                    while (pos + 2 <= end) {
-                        if (query.charAt(pos) == '*' && query.charAt(pos + 1) == '/') {
-                            pos += 2;
-                            return new Token(TokenType.Comment, tokenBegin, pos);
-                        }
+                        return commentUntilEndOfLine(tokenBegin);
+                    } else {
                         ++pos;
+                        while (pos + 2 <= end) {
+                            if (query.charAt(pos) == '*' && query.charAt(pos + 1) == '/') {
+                                pos += 2;
+                                return new Token(TokenType.Comment, tokenBegin, pos);
+                            }
+                            ++pos;
+                        }
+                        return new Token(TokenType.ErrorMultilineCommentInfoNotClosed, tokenBegin, pos);
                     }
-                    return new Token(TokenType.ErrorMultilineCommentInfoNotClosed, tokenBegin, pos);
                 }
                 return new Token(TokenType.Slash, tokenBegin, pos);
             }
@@ -294,7 +294,7 @@ public class Lexer {
     private Token quotedString(char quote, TokenType successToken, TokenType errorToken, int tokenBegin) {
         ++pos;
         while (true) {
-            pos = findFirstSymbols(query, '\\', begin, end);
+            pos = findFirstSymbols(query, pos, end, quote, '\\');
             if (pos >= end) {
                 return new Token(errorToken, tokenBegin, end);
             }
@@ -320,7 +320,8 @@ public class Lexer {
         }
     }
 
-    private Token commentUntilEndOfLine() {
-        return null;
+    private Token commentUntilEndOfLine(int tokenBegin) {
+        pos = findFirstSymbols(query, pos, end, '\n');
+        return new Token(TokenType.Comment, tokenBegin, pos);
     }
 }

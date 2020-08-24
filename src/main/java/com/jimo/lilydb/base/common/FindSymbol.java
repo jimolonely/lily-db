@@ -6,12 +6,14 @@ package com.jimo.lilydb.base.common;
  */
 public class FindSymbol {
 
-    public static int findFirstSymbols(String text, char symbol, int start, int end) {
-        for (int i = start; i < end; i++) {
-            if (text.charAt(i) == symbol) {
-                return i;
+    public static int findFirstSymbols(String text, int start, int end, char... symbols) {
+        String search = text.substring(start, end);
+        for (char symbol : symbols) {
+            int i = search.indexOf(symbol);
+            if (i >= 0) {
+                return i + start;
             }
         }
-        return -1;
+        return end;
     }
 }
