@@ -9,49 +9,55 @@ public enum TokenType {
     Whitespace,
     Comment,
 
-    ErrorMaxQuerySizeExceeded,
-    ErrorSingleQuoteIsNotClosed,
-    ErrorDoubleQuoteIsNotClosed,
-    ErrorBackQuoteIsNotClosed,
-    ErrorMultilineCommentInfoNotClosed,
-    ErrorSingleExclamationMark,
-    ErrorSinglePipeMark,
-    Error,
+    BaseWord,
 
-    Dot,
-
-    ErrorWrongNumber,
     Number,
     StringLiteral,
+
     QuotedIdentifier,
 
     OpeningRoundBracket,
     ClosingRoundBracket,
+
     OpeningSquareBracket,
     ClosingSquareBracket,
+
     OpeningCurlyBrace,
     ClosingCurlyBrace,
+
     Comma,
     Semicolon,
+    Dot,
 
-    BaseWord,
-    Plus,
-    Arrow,
-    Minus,
     Asterisk,
+
+    Plus,
+    Minus,
     Slash,
     Percent,
-    Equals,
-    NotEquals,
-    LessOrEqual,
-    Less,
-    GreaterOrEquals,
-    Greater,
+    Arrow,
     QuestionMark,
     Colon,
+    Equals,
+    NotEquals,
+    Less,
+    Greater,
+    LessOrEqual,
+    GreaterOrEquals,
     Concatenation,
-    DoubleAt,
-    At,
 
-    EndOfStream
+    At,
+    DoubleAt,
+
+    EndOfStream,
+
+    Error,
+    ErrorMultilineCommentInfoNotClosed,
+    ErrorSingleQuoteIsNotClosed,
+    ErrorDoubleQuoteIsNotClosed,
+    ErrorBackQuoteIsNotClosed,
+    ErrorSingleExclamationMark,
+    ErrorSinglePipeMark,
+    ErrorWrongNumber,
+    ErrorMaxQuerySizeExceeded,
 }
