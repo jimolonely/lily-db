@@ -6,4 +6,7 @@ package com.jimo.lilydb.parser;
  */
 public class Expected {
 
+    public void add(IParser.Pos pos, String name) {
+
+    }
 }

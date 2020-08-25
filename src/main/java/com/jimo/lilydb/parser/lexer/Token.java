@@ -1,4 +1,4 @@
-package com.jimo.lilydb.parser;
+package com.jimo.lilydb.parser.lexer;
 
 import lombok.*;
 
@@ -23,15 +23,15 @@ public class Token {
         return end - begin;
     }
 
-    boolean isSignificant() {
+    public boolean isSignificant() {
         return type != TokenType.Whitespace && type != TokenType.Comment;
     }
 
-    boolean isError() {
+    public boolean isError() {
         return type.compareTo(TokenType.EndOfStream) > 0;
     }
 
-    boolean isEnd() {
+    public boolean isEnd() {
         return type == TokenType.EndOfStream;
     }
 }

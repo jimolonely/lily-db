@@ -1,6 +1,9 @@
 package com.jimo.lilydb.parser;
 
 
+import com.jimo.lilydb.parser.lexer.Lexer;
+import com.jimo.lilydb.parser.lexer.Token;
+import com.jimo.lilydb.parser.lexer.TokenType;
 import org.junit.Test;
 
 import java.util.HashMap;

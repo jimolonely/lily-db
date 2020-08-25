@@ -1,4 +1,4 @@
-package com.jimo.lilydb.parser;
+package com.jimo.lilydb.parser.lexer;
 
 import static com.jimo.lilydb.base.common.FindSymbol.findFirstSymbols;
 import static com.jimo.lilydb.common.StringUtils.*;

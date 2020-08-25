@@ -1,4 +1,4 @@
-package com.jimo.lilydb.parser;
+package com.jimo.lilydb.parser.lexer;
 
 /**
  * @author jimo

@@ -1,5 +1,8 @@
 package com.jimo.lilydb.parser;
 
+import com.jimo.lilydb.parser.lexer.Token;
+import com.jimo.lilydb.parser.lexer.TokenType;
+
 /**
  * @author jimo
  * @date 2020/8/24 下午9:14

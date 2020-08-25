@@ -1,5 +1,8 @@
 package com.jimo.lilydb.parser;
 
+import com.jimo.lilydb.parser.lexer.Lexer;
+import com.jimo.lilydb.parser.lexer.Token;
+
 import java.util.List;
 
 /**
